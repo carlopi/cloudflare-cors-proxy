@@ -120,7 +120,7 @@ const targetUrl =    'https://' + originUrl.substr(originUrl.indexOf(PROXY_ENDPO
                 return new Response(responseBody, responseInit);
 
             } else {
-                const responseHeaders = new Headers();
+                var responseHeaders = new Headers();
                 responseHeaders = setupCORSHeaders(responseHeaders);
 
                 let country = false;
