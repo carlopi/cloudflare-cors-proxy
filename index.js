@@ -75,7 +75,7 @@ export default {
 
     async function handleRequest(request) {
       const url = new URL(request.url);
-      let apiUrl = url.substr(11);
+      let apiUrl = 'https://' + url.substr(url.indexOf(PROXY_ENDPOINT) + lenght(PROXY_ENDPOINT));
 
       if (apiUrl == null) {
         apiUrl = API_URL;
