@@ -59,7 +59,8 @@ addEventListener("fetch", async event => {
 
 const PROXY_ENDPOINT = '/corsproxy/'
         //const targetUrl = decodeURIComponent(decodeURIComponent(originUrl.search.substr(1)));
-const targetUrl =    'https://' + originUrl.substr(originUrl.indexOf(PROXY_ENDPOINT) + PROXY_ENDPOINT.length);
+	const origin_to_string = originUrl.toString();
+const targetUrl =    'https://' + origin_to_string.substr(origin_to_string.indexOf(PROXY_ENDPOINT) + PROXY_ENDPOINT.length);
 
         const originHeader = event.request.headers.get("Origin");
         const connectingIp = event.request.headers.get("CF-Connecting-IP");
