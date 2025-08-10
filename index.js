@@ -97,8 +97,8 @@ const targetUrl =    'https://' + originUrl.substr(originUrl.indexOf(PROXY_ENDPO
                 });
 
                 const response = await fetch(targetUrl, newRequest);
-                const responseHeaders = new Headers(response.headers);
-                const exposedHeaders = [];
+                var responseHeaders = new Headers(response.headers);
+                var exposedHeaders = [];
                 const allResponseHeaders = {};
                 for (const [key, value] of response.headers.entries()) {
                     exposedHeaders.push(key);
