@@ -73,7 +73,7 @@ const targetUrl =    'https://' + originUrl.substr(originUrl.indexOf(PROXY_ENDPO
                 } catch (e) {}
             }
 
-            if (originUrl.search.startsWith("?")) {
+            if (true) {
                 const filteredHeaders = {};
                 for (const [key, value] of event.request.headers.entries()) {
                     if (
