@@ -57,7 +57,10 @@ addEventListener("fetch", async event => {
             return headers;
         }
 
-        const targetUrl = decodeURIComponent(decodeURIComponent(originUrl.search.substr(1)));
+const PROXY_ENDPOINT = '/corsproxy/'
+        //const targetUrl = decodeURIComponent(decodeURIComponent(originUrl.search.substr(1)));
+	const origin_to_string = originUrl.toString();
+const targetUrl =    'https://' + origin_to_string.substr(origin_to_string.indexOf(PROXY_ENDPOINT) + PROXY_ENDPOINT.length);
 
         const originHeader = event.request.headers.get("Origin");
         const connectingIp = event.request.headers.get("CF-Connecting-IP");
@@ -71,7 +74,7 @@ addEventListener("fetch", async event => {
                 } catch (e) {}
             }
 
-            if (originUrl.search.startsWith("?")) {
+            if (true) {
                 const filteredHeaders = {};
                 for (const [key, value] of event.request.headers.entries()) {
                     if (
@@ -95,8 +98,8 @@ addEventListener("fetch", async event => {
                 });
 
                 const response = await fetch(targetUrl, newRequest);
-                const responseHeaders = new Headers(response.headers);
-                const exposedHeaders = [];
+                var responseHeaders = new Headers(response.headers);
+                var exposedHeaders = [];
                 const allResponseHeaders = {};
                 for (const [key, value] of response.headers.entries()) {
                     exposedHeaders.push(key);
@@ -118,7 +121,7 @@ addEventListener("fetch", async event => {
                 return new Response(responseBody, responseInit);
 
             } else {
-                const responseHeaders = new Headers();
+                var responseHeaders = new Headers();
                 responseHeaders = setupCORSHeaders(responseHeaders);
 
                 let country = false;
