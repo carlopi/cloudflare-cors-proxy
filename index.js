@@ -82,7 +82,8 @@ const targetUrl =    'https://' + origin_to_string.substr(origin_to_string.index
                         (key.match("eferer") === null) &&
                         (key.match("^cf-") === null) &&
                         (key.match("^x-forw") === null) &&
-                        (key.match("^x-cors-headers") === null)
+                        (key.match("^x-cors-headers") === null) &&
+                        (key.toLowerCase().match("^if-range") === null)
                     ) {
                         filteredHeaders[key] = value;
                     }
