@@ -176,8 +176,9 @@ addEventListener("fetch", async event => {
             }
         } else {
             return new Response(
-                "Documentation is at https://duckdb.org/docs/stable/operations_manual/proxy-for-duckdb-wasm</br>\n" +
-                "<a href='https://github.com/carlopi/cloudflare-cors-anywhere'>https://github.com/carlopi/cloudflare-cors-anywhere</a></br>\n",
+		"This is a Proxy to be used by DuckDB-Wasm</br>\n" +
+                "Documentation is at <a href='https://duckdb.org/docs/stable/operations_manual/proxy-for-duckdb-wasm'>https://duckdb.org/docs/stable/operations_manual/proxy-for-duckdb-wasm</a></br>\n" +
+                "Code is at <a href='https://github.com/carlopi/cloudflare-cors-anywhere'>https://github.com/carlopi/cloudflare-cors-anywhere</a></br>\n",
                 {
                     status: 403,
                     statusText: 'Forbidden',
