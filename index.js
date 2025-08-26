@@ -180,7 +180,7 @@ addEventListener("fetch", async event => {
             }
         } else {
             return new Response(
-		"This is a Proxy to be used by DuckDB-Wasm</br>\n" +
+		"This is a Proxy to be used by DuckDB-Wasm</br>\n" + "</br>\n" +
 		"Current valid endpoint are corsproxy/$TARGET_URL, cors_proxy/$TARGET_URL and s3tables_proxy/$TARGET_URL</br>\n" +
                 "Documentation is at <a href='https://duckdb.org/docs/stable/operations_manual/proxy-for-duckdb-wasm'>https://duckdb.org/docs/stable/operations_manual/proxy-for-duckdb-wasm</a></br>\n" +
                 "Code is at <a href='https://github.com/carlopi/cloudflare-cors-anywhere'>https://github.com/carlopi/cloudflare-cors-anywhere</a></br>\n",
