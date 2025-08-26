@@ -68,6 +68,7 @@ addEventListener("fetch", async event => {
 
 	
 	const CORSPROXY_ENDPOINT = '/corsproxy/'
+	const CORS_PROXY_ENDPOINT = '/cors_proxy/'
 	const S3TABLES_ENDPOINT = '/s3tables_proxy/'
 	const origin_to_string = originUrl.toString();
 
@@ -77,6 +78,9 @@ addEventListener("fetch", async event => {
 
 	if (pathname.startsWith(CORSPROXY_ENDPOINT) && pathname != CORSPROXY_ENDPOINT) {
 		targetUrl =    'https://' + origin_to_string.substr(origin_to_string.indexOf(CORSPROXY_ENDPOINT) + CORSPROXY_ENDPOINT.length);
+		needsCors = true;
+	} else if (pathname.startsWith(CORS_PROXY_ENDPOINT) && pathname != CORS_PROXY_ENDPOINT) {
+		targetUrl =    'https://' + origin_to_string.substr(origin_to_string.indexOf(CORS_PROXY_ENDPOINT) + CORS_PROXY_ENDPOINT.length);
 		needsCors = true;
 	} else if (pathname.startsWith(S3TABLES_ENDPOINT) && pathname != S3TABLES_ENDPOINT) {
 		targetUrl =    'https://' + origin_to_string.substr(origin_to_string.indexOf(S3TABLES_ENDPOINT) + S3TABLES_ENDPOINT.length);
@@ -177,6 +181,7 @@ addEventListener("fetch", async event => {
         } else {
             return new Response(
 		"This is a Proxy to be used by DuckDB-Wasm</br>\n" +
+		"Current valid endpoint are corsproxy/$TARGET_URL, cors_proxy/$TARGET_URL and s3tables_proxy/$TARGET_URL</br>\n" +
                 "Documentation is at <a href='https://duckdb.org/docs/stable/operations_manual/proxy-for-duckdb-wasm'>https://duckdb.org/docs/stable/operations_manual/proxy-for-duckdb-wasm</a></br>\n" +
                 "Code is at <a href='https://github.com/carlopi/cloudflare-cors-anywhere'>https://github.com/carlopi/cloudflare-cors-anywhere</a></br>\n",
                 {
