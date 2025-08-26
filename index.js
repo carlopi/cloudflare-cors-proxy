@@ -1,4 +1,8 @@
 /*
+CORS for DuckDB-Wasm, as a Cloudflare Worker
+
+Based on:
+----
 CORS Anywhere as a Cloudflare Worker!
 (c) 2019 by Zibri (www.zibri.org)
 email: zibri AT zibri DOT org
@@ -11,10 +15,12 @@ The script also includes functionality to parse custom headers and provide detai
 about the CORS proxy service when accessed without specific parameters.
 The script is configurable with whitelist and blacklist patterns, although the blacklist feature is currently unused.
 The main goal is to facilitate cross-origin requests while enforcing specific security and rate-limiting policies.
+----
+
 */
 
 // Configuration: Whitelist and Blacklist (not used in this version)
-// whitelist = [ "^http.?://www.zibri.org$", "zibri.org$", "test\\..*" ];  // regexp for whitelisted urls
+// whitelist = [ "^http.?://shell.duckdb.org$", "duckdb.org$", "test\\..*" ];  // regexp for whitelisted urls
 const blacklistUrls = [];           // regexp for blacklisted urls
 const whitelistOrigins = [ ".*" ];   // regexp for whitelisted origins
 
@@ -133,13 +139,10 @@ const targetUrl =    'https://' + origin_to_string.substr(origin_to_string.index
                 }
 
                 return new Response(
-                    "CLOUDFLARE-CORS-ANYWHERE\n\n" +
-                    "Source:\nhttps://github.com/Zibri/cloudflare-cors-anywhere\n\n" +
+                    "CLOUDFLARE-CORS-ANYWHERE for DuckDB-Wasm\n\n" +
+                    "Source:\nhttps://github.com/carlopi/cloudflare-cors-proxy\n\n" +
                     "Usage:\n" +
                     originUrl.origin + "/?uri\n\n" +
-                    "Donate:\nhttps://paypal.me/Zibri/5\n\n" +
-                    "Limits: 100,000 requests/day\n" +
-                    "          1,000 requests/10 minutes\n\n" +
                     (originHeader !== null ? "Origin: " + originHeader + "\n" : "") +
                     "IP: " + connectingIp + "\n" +
                     (country ? "Country: " + country + "\n" : "") +
@@ -154,10 +157,8 @@ const targetUrl =    'https://' + origin_to_string.substr(origin_to_string.index
             }
         } else {
             return new Response(
-                "Create your own CORS proxy</br>\n" +
-                "<a href='https://github.com/Zibri/cloudflare-cors-anywhere'>https://github.com/Zibri/cloudflare-cors-anywhere</a></br>\n" +
-                "\nDonate</br>\n" +
-                "<a href='https://paypal.me/Zibri/5'>https://paypal.me/Zibri/5</a>\n",
+                "Documentation is at https://duckdb.org/docs/stable/operations_manual/proxy-for-duckdb-wasm</br>\n" +
+                "<a href='https://github.com/carlopi/cloudflare-cors-anywhere'>https://github.com/carlopi/cloudflare-cors-anywhere</a></br>\n",
                 {
                     status: 403,
                     statusText: 'Forbidden',
