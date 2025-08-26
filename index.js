@@ -75,10 +75,10 @@ addEventListener("fetch", async event => {
 	let needsS3Tables = false;
 	let needsCors = false;
 
-	if (pathname.startsWith(CORSPROXY_ENDPOINT)) {
+	if (pathname.startsWith(CORSPROXY_ENDPOINT) && pathname != CORSPROXY_ENDPOINT) {
 		targetUrl =    'https://' + origin_to_string.substr(origin_to_string.indexOf(CORSPROXY_ENDPOINT) + CORSPROXY_ENDPOINT.length);
 		needsCors = true;
-	} else if (pathname.startsWith(S3TABLES_ENDPOINT)) {
+	} else if (pathname.startsWith(S3TABLES_ENDPOINT) && pathname != S3TABLES_ENDPOINT) {
 		targetUrl =    'https://' + origin_to_string.substr(origin_to_string.indexOf(S3TABLES_ENDPOINT) + S3TABLES_ENDPOINT.length);
 		needsCors = true;
 		needsS3Tables = true;
