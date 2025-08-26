@@ -47,6 +47,9 @@ addEventListener("fetch", async event => {
         
         const originUrl = new URL(event.request.url);
 
+	const url = new URL(originUrl);
+	const pathname = url.pathname;
+
         // Function to modify headers to enable CORS
         function setupCORSHeaders(headers) {
             headers.set("Access-Control-Allow-Origin", event.request.headers.get("Origin"));
@@ -63,15 +66,28 @@ addEventListener("fetch", async event => {
             return headers;
         }
 
-const PROXY_ENDPOINT = '/corsproxy/'
-        //const targetUrl = decodeURIComponent(decodeURIComponent(originUrl.search.substr(1)));
+	
+	const CORSPROXY_ENDPOINT = '/corsproxy/'
+	const S3TABLES_ENDPOINT = '/s3tables_proxy/'
 	const origin_to_string = originUrl.toString();
-const targetUrl =    'https://' + origin_to_string.substr(origin_to_string.indexOf(PROXY_ENDPOINT) + PROXY_ENDPOINT.length);
+
+	let targetUrl = "";
+	let needsS3Tables = false;
+	let needsCors = false;
+
+	if (pathname.startsWith(CORSPROXY_ENDPOINT)) {
+		targetUrl =    'https://' + origin_to_string.substr(origin_to_string.indexOf(CORSPROXY_ENDPOINT) + CORSPROXY_ENDPOINT.length);
+		needsCors = true;
+	} else if (pathname.startsWith(S3TABLES_ENDPOINT)) {
+		targetUrl =    'https://' + origin_to_string.substr(origin_to_string.indexOf(S3TABLES_ENDPOINT) + S3TABLES_ENDPOINT.length);
+		needsCors = true;
+		needsS3Tables = true;
+	}
 
         const originHeader = event.request.headers.get("Origin");
         const connectingIp = event.request.headers.get("CF-Connecting-IP");
 
-        if ((!isListedInWhitelist(targetUrl, blacklistUrls)) && (isListedInWhitelist(originHeader, whitelistOrigins))) {
+        if ((targetUrl !== "") && (!isListedInWhitelist(targetUrl, blacklistUrls)) && (isListedInWhitelist(originHeader, whitelistOrigins))) {
             let customHeaders = event.request.headers.get("x-cors-headers");
 
             if (customHeaders !== null) {
@@ -89,7 +105,7 @@ const targetUrl =    'https://' + origin_to_string.substr(origin_to_string.index
                         (key.match("^cf-") === null) &&
                         (key.match("^x-forw") === null) &&
                         (key.match("^x-cors-headers") === null) &&
-                        (key.toLowerCase().match("^if-range") === null)
+                        ((!needsS3Tables) || (key.toLowerCase().match("^if-range") === null))
                     ) {
                         filteredHeaders[key] = value;
                     }
@@ -112,11 +128,14 @@ const targetUrl =    'https://' + origin_to_string.substr(origin_to_string.index
                     exposedHeaders.push(key);
                     allResponseHeaders[key] = value;
                 }
-                exposedHeaders.push("cors-received-headers");
-                responseHeaders = setupCORSHeaders(responseHeaders);
+	
+		if (needsCors) {
+			exposedHeaders.push("cors-received-headers");
+			responseHeaders = setupCORSHeaders(responseHeaders);
 
-                responseHeaders.set("Access-Control-Expose-Headers", exposedHeaders.join(","));
-                responseHeaders.set("cors-received-headers", JSON.stringify(allResponseHeaders));
+			responseHeaders.set("Access-Control-Expose-Headers", exposedHeaders.join(","));
+			responseHeaders.set("cors-received-headers", JSON.stringify(allResponseHeaders));
+		}
 
                 const responseBody = isPreflightRequest ? null : await response.arrayBuffer();
 
