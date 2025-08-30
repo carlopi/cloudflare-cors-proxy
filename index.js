@@ -111,8 +111,7 @@ addEventListener("fetch", async event => {
                         (key.match("^x-cors-headers") === null) &&
                         ((!needsS3Tables) || (key.toLowerCase().match("^if-range") === null)) &&
                         ((!needsS3Tables) || (key.toLowerCase().match("^sec-fetch-") === null)) &&
-                        ((!needsS3Tables) || (key.toLowerCase().match("^x-host-override") === null)) &&
-                        ((!needsS3Tables) || (key.toLowerCase().match("^cf-visitor") === null))
+                        ((!needsS3Tables) || (key.toLowerCase().match("^x-host-override") === null))
                     ) {
                         filteredHeaders[key] = value;
                     }
