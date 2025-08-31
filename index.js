@@ -124,9 +124,16 @@ addEventListener("fetch", async event => {
                     }
                 }
 
+				if (skipCF) {
                 if (customHeaders !== null) {
+                    Object.entries(customHeaders).forEach((entry) => (if (entry[0].match("^cf-" === null)) filteredHeaders[entry[0]] = entry[1]));
+                }
+				}
+                else {
+				if (customHeaders !== null) {
                     Object.entries(customHeaders).forEach((entry) => (filteredHeaders[entry[0]] = entry[1]));
                 }
+				}
 
                 const newRequest = new Request(event.request, {
                     redirect: "follow",
