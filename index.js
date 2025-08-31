@@ -70,10 +70,12 @@ addEventListener("fetch", async event => {
 	const CORSPROXY_ENDPOINT = '/corsproxy/'
 	const CORS_PROXY_ENDPOINT = '/cors_proxy/'
 	const S3TABLES_ENDPOINT = '/s3tables_proxy/'
+	const S3TABLES_ENDPOINT_TEST = '/s3tables_proxy_test/'
 	const origin_to_string = originUrl.toString();
 
 	let targetUrl = "";
 	let needsS3Tables = false;
+	let skipCF = false;
 	let needsCors = false;
 
 	if (pathname.startsWith(CORSPROXY_ENDPOINT) && pathname != CORSPROXY_ENDPOINT) {
@@ -86,6 +88,11 @@ addEventListener("fetch", async event => {
 		targetUrl =    'https://' + origin_to_string.substr(origin_to_string.indexOf(S3TABLES_ENDPOINT) + S3TABLES_ENDPOINT.length);
 		needsCors = true;
 		needsS3Tables = true;
+	} else if (pathname.startsWith(S3TABLES_ENDPOINT_TEST) && pathname != S3TABLES_ENDPOINT_TEST) {
+		targetUrl =    'https://' + origin_to_string.substr(origin_to_string.indexOf(S3TABLES_ENDPOINT_TEST) + S3TABLES_ENDPOINT_TEST.length);
+		needsCors = true;
+		needsS3Tables = true;
+		skipCF = true;
 	}
 
         const originHeader = event.request.headers.get("Origin");
@@ -106,7 +113,7 @@ addEventListener("fetch", async event => {
                     if (
                         (key.match("^origin") === null) &&
                         (key.match("eferer") === null) &&
-                        (key.match("^cf-") === null) &&
+                        ((!skipCF) || (key.match("^cf-") === null)) &&
                         (key.match("^x-forw") === null) &&
                         (key.match("^x-cors-headers") === null) &&
                         ((!needsS3Tables) || (key.toLowerCase().match("^if-range") === null)) &&
