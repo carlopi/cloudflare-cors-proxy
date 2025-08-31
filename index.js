@@ -128,11 +128,6 @@ addEventListener("fetch", async event => {
                     Object.entries(customHeaders).forEach((entry) => (filteredHeaders[entry[0]] = entry[1]));
                 }
 
-				if (skipCF) {
-					filteredHeaders.delete("cf-visitor");
-				}
-
-
                 const newRequest = new Request(event.request, {
                     redirect: "follow",
                     headers: filteredHeaders
